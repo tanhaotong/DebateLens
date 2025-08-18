@@ -1,0 +1,126 @@
+{
+  "name": "debatelens",
+  "version": "1.0.0",
+  "description": "辩论视频分析工具",
+  "author": "DebateLens Team",
+  "main": "electron/main.js",
+  "scripts": {
+    "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
+    "dev:backend": "cd backend && python run.py",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build:frontend": "cd frontend && npm run build",
+    "install:all": "npm install && cd frontend && npm install && cd ../backend && pip install -r requirements.txt",
+    "build:complete": "node scripts/build-complete.js",
+    "build:quick": "node scripts/quick-build.js",
+    "build:setup": "node scripts/build-complete.js",
+    "install:deps": "node scripts/install-deps.js",
+    "install:minimal": "node scripts/install-minimal.js",
+    "version:patch": "node scripts/version-manager.js patch",
+    "version:minor": "node scripts/version-manager.js minor",
+    "version:major": "node scripts/version-manager.js major",
+    "build:version": "node scripts/version-manager.js patch --no-build && npm run build:quick",
+    "logo:check": "node scripts/create-logo.js",
+    "logo:generate": "node scripts/create-logo.js --generate",
+    "logo:help": "node scripts/create-logo.js --help"
+  },
+  "build": {
+    "appId": "com.debatelens.app",
+    "productName": "DebateLens",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "electron/**/*",
+      "frontend/dist/**/*",
+      "backend/**/*",
+      "node_modules/python-shell/**/*",
+      "!backend/venv/**/*",
+      "!backend/__pycache__/**/*",
+      "!backend/**/__pycache__/**/*",
+      "!backend/**/*.pyc",
+      "!backend/test/**/*",
+      "!backend/temp/**/*",
+      "!backend/instance/**/*",
+      "!backend/migrations/**/*",
+      "!backend/.env",
+      "!backend/config.json",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "backend",
+        "to": "backend",
+        "filter": [
+          "**/*",
+          "!venv/**/*",
+          "!__pycache__/**/*",
+          "!**/__pycache__/**/*",
+          "!**/*.pyc",
+          "!test/**/*",
+          "!temp/**/*",
+          "!instance/**/*",
+          "!migrations/**/*",
+          "!.env",
+          "!config.json"
+        ]
+      }
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "assets/icon.ico"
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "arm64"
+          ]
+        }
+      ],
+      "icon": "assets/icon.icns"
+    },
+    "linux": {
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "assets/icon.png"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "concurrently": "^9.1.0",
+    "electron": "^37.2.6",
+    "electron-builder": "^26.0.12",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.11"
+  },
+  "dependencies": {
+    "@antv/g6": "^5.0.49",
+    "@antv/layout": "^1.2.14-beta.9",
+    "@types/dagre": "^0.7.53",
+    "buffer-from": "^1.1.2",
+    "dagre": "^0.8.5",
+    "source-map-support": "^0.5.21",
+    "python-shell": "^5.0.0"
+  }
+}

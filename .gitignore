@@ -1,0 +1,232 @@
+# 忽略 node_modules (所有层级)
+node_modules/
+*/node_modules/
+**/node_modules/
+
+# 忽略 Python 虚拟环境 (所有层级)
+venv/
+*/venv/
+**/venv/
+.venv/
+env/
+ENV/
+
+# 忽略 pycache (所有层级)
+__pycache__/
+*/__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+
+# 忽略数据库文件
+*.db
+*.sqlite
+*.sqlite3
+instance/
+*/instance/
+
+# 忽略临时文件夹内容，但保留文件夹
+/temp/*
+!temp/.gitkeep
+
+# 忽略后端临时文件夹内容，但保留文件夹
+/backend/temp/*
+!/backend/temp/.gitkeep
+
+# 忽略日志文件
+*.log
+logs/
+
+# 忽略环境变量文件
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 忽略配置文件
+config.json
+backend/config.json
+
+# 忽略启动脚本的临时文件
+start.sh.bak
+start.bat.bak
+
+# 忽略音频/视频文件
+*.aac
+*.mp3
+*.mp4
+*.avi
+*.mov
+*.wav
+*.flac
+*.ogg
+
+# 忽略图片文件 (如果需要)
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+*.svg
+
+# 忽略压缩文件
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
+
+# 忽略 IDE 配置文件
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 忽略操作系统文件
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 忽略构建输出
+dist/
+build/
+*.egg-info/
+
+# 忽略缓存文件
+.cache/
+.parcel-cache/
+.vite/
+
+# 忽略测试覆盖率报告
+coverage/
+.nyc_output/
+
+# 忽略依赖锁定文件 (可选，如果不需要版本控制)
+# package-lock.json
+# yarn.lock
+
+# 忽略前端构建输出
+frontend/dist/
+frontend/build/
+
+# 忽略 Electron 相关文件
+out/
+app/
+*.app/
+*.exe
+*.dmg
+*.deb
+*.rpm
+*.AppImage
+
+# 忽略 Python 相关文件
+*.pyc
+*.pyo
+*.pyd
+.Python
+pip-log.txt
+pip-delete-this-directory.txt
+.tox/
+.coverage
+.pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+
+# 忽略数据库迁移文件 (可选)
+# backend/migrations/
+
+# 忽略日志和临时文件
+*.tmp
+*.temp
+*.bak
+*.backup
+*.old
+
+# 忽略 API 密钥和敏感信息
+secrets.json
+*.key
+*.pem
+*.p12
+*.pfx
+
+# 忽略下载的文件
+downloads/
+download/
+
+# 忽略上传的文件
+uploads/
+upload/
+
+# 忽略分析结果缓存
+analysis_cache/
+cache/
+
+# 忽略音频转录缓存
+transcription_cache/
+
+# 忽略视频处理缓存
+video_cache/
+
+# 忽略 Node.js 相关
+.npm
+.eslintcache
+.node_repl_history
+
+# 忽略 TypeScript 编译输出
+*.tsbuildinfo
+
+# 忽略前端开发服务器
+.vite/
+.parcel-cache/
+
+# 忽略测试文件
+test-results/
+playwright-report/
+test-results.xml
+
+# 忽略文档生成
+docs/_build/
+site/
+
+# 忽略备份文件
+*.orig
+*.rej
+*.swp
+*.swo
+*~
+
+# 忽略系统文件
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# 忽略压缩包
+*.zip
+*.tar.gz
+*.rar
+*.7z
+
+# 忽略大文件
+*.mp4
+*.avi
+*.mov
+*.mkv
+*.flv
+*.webm
+*.m4v
+*.3gp
+*.mp3
+*.wav
+*.flac
+*.aac
+*.ogg
+*.wma
