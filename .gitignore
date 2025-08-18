@@ -113,7 +113,7 @@ frontend/build/
 
 # 忽略 Electron 相关文件
 out/
-app/
+# app/ (注释掉，避免影响 backend/app)
 *.app/
 *.exe
 *.dmg
@@ -230,3 +230,7 @@ desktop.ini
 *.aac
 *.ogg
 *.wma
+
+项目开发计划.md
+
+test/
