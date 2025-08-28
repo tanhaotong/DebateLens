@@ -3,7 +3,8 @@ import json
 
 def load_api_config():
     """从配置文件加载API配置"""
-    config_file = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config.json')
+    # 统一使用 backend/app/config.json，避免与接口读写路径不一致
+    config_file = os.path.join(os.path.dirname(__file__), 'config.json')
     try:
         if os.path.exists(config_file):
             with open(config_file, 'r', encoding='utf-8') as f:

@@ -75,7 +75,6 @@ DebateLens-test/
 │   │   │   ├── video.py    # 视频模型
 │   │   │   └── db.py       # 数据库配置
 │   │   ├── services/       # 业务服务
-│   │   │   ├── ai_service.py # AI服务统一接口
 │   │   │   ├── analysis_service.py # 分析服务
 │   │   │   ├── audio_service.py # 音频处理服务
 │   │   │   ├── audio_transcribe_service.py # 音频转录服务
@@ -84,9 +83,6 @@ DebateLens-test/
 │   │   ├── config.py       # 配置文件
 │   │   └── __init__.py     # Flask应用初始化
 │   ├── migrations/         # 数据库迁移
-│   ├── test/               # 测试文件
-│   │   ├── test_config.py  # 配置测试
-│   │   └── ...             # 其他测试文件
 │   ├── config.json         # API配置文件
 │   ├── requirements.txt    # Python依赖
 │   └── run.py             # 启动脚本
@@ -95,10 +91,8 @@ DebateLens-test/
 │   │   ├── components/     # React组件
 │   │   │   ├── AnalysisList.tsx      # 分析列表
 │   │   │   ├── ApiConfigModal.tsx    # API配置弹窗
-│   │   │   ├── ArgumentMap.tsx       # 气泡图
-│   │   │   ├── AttackDefenceBubble.tsx # 原始气泡图
-│   │   │   ├── AttackDefenseTree.tsx # 原始攻防树
-│   │   │   ├── AttackDefenceTree2.tsx # 树形图
+│   │   │   ├── ArgumentMap.tsx       # 力导向图
+│   │   │   ├── AttackDefenseTree.tsx # 静态图
 │   │   │   ├── DebatePlayer.tsx      # 视频播放器
 │   │   │   ├── GeminiChat.tsx        # AI聊天
 │   │   │   ├── ProjectList.tsx       # 项目列表
@@ -469,24 +463,6 @@ tail -f backend/logs/app.log
 3. 提交更改：`git commit -am 'Add new feature'`
 4. 推送分支：`git push origin feature/new-feature`
 5. 创建Pull Request
-
-## 许可证
-
-本项目采用MIT许可证，详见LICENSE文件。
-
-## 联系方式
-
-- 项目维护者：[维护者姓名]
-- 邮箱：[邮箱地址]
-- 项目地址：[GitHub地址]
-
-## 更新日志
-
-### v1.0.0 (2024-01-XX)
-- 初始版本发布
-- 支持Bilibili视频分析
-- 实现基础可视化功能
-- 集成Gemini AI对话
 
 ### 计划功能
 - [ ] 支持更多视频平台

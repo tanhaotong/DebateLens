@@ -77,13 +77,17 @@ const ArgumentMap: React.FC<ArgumentMapProps> = ({
       }
     }
     
+    // 即使没有可见分析数据，也要触发初始渲染以显示锚点
+    if (current.length === 0 && prev.length === 0 && prevVisibleAnalysisRef.current.length === 0) {
+      prevVisibleAnalysisRef.current = current;
+      return true;
+    }
+    
     return false;
   }, [visibleAnalysis]);
 
   // 构建论证地图数据
   const argumentData = useMemo(() => {
-    if (!visibleAnalysis.length) return { nodes: [], links: [] };
-
     const nodes: ArgumentNode[] = [];
     const links: { source: string; target: string; type: 'attack' | 'support' | 'anchor-connection' }[] = [];
     const nodeMap = new Map<string, ArgumentNode>();
@@ -371,7 +375,7 @@ const ArgumentMap: React.FC<ArgumentMapProps> = ({
 
   // 渲染论证地图
   useEffect(() => {
-    if (!svgRef.current || !argumentData.nodes.length) return;
+    if (!svgRef.current) return;
     
     // 如果数据没有真正改变，不重新渲染
     if (!hasDataChanged) return;
@@ -396,12 +400,34 @@ const ArgumentMap: React.FC<ArgumentMapProps> = ({
     svg.call(zoom as any);
     zoomRef.current = zoom as any;
 
+    // 检查是否只有锚点节点
+    const hasOnlyAnchors = argumentData.nodes.length === 2 && 
+                          argumentData.nodes.every(node => node.isAnchor);
+
     // 创建力导向布局
     const simulation = d3.forceSimulation(argumentData.nodes)
       .force("link", d3.forceLink(argumentData.links).id((d: any) => d.id).distance(100))
       .force("charge", d3.forceManyBody().strength(-300))
       .force("center", d3.forceCenter(width / 2, height / 2))
       .force("collision", d3.forceCollide().radius((d: any) => Math.max(20, d.strength / 2)));
+
+    // 如果只有锚点，手动设置位置
+    if (hasOnlyAnchors) {
+      const leftAnchor = argumentData.nodes.find(node => node.side === 'left');
+      const rightAnchor = argumentData.nodes.find(node => node.side === 'right');
+      
+      if (leftAnchor && rightAnchor) {
+        leftAnchor.x = width * 0.3;
+        leftAnchor.y = height / 2;
+        leftAnchor.fx = width * 0.3;
+        leftAnchor.fy = height / 2;
+        
+        rightAnchor.x = width * 0.7;
+        rightAnchor.y = height / 2;
+        rightAnchor.fx = width * 0.7;
+        rightAnchor.fy = height / 2;
+      }
+    }
 
     // 创建连接线 - 在g组中
     const link = g.append("g")
@@ -599,25 +625,8 @@ const ArgumentMap: React.FC<ArgumentMapProps> = ({
     };
   }, [argumentData, selectedId, onNodeSelect]);
 
-  if (!visibleAnalysis.length) {
-    return (
-      <div style={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        justifyContent: 'center', 
-        height: '100%',
-        color: '#666',
-        fontSize: '14px',
-        flexDirection: 'column',
-        gap: '10px'
-      }}>
-        <div>暂无论证数据</div>
-        <div style={{ fontSize: '12px', color: '#999' }}>
-          分析数据: {analysis.length} 条, 当前时间: {currentTime}s
-        </div>
-      </div>
-    );
-  }
+  // 即使没有可见分析数据，也要显示锚点
+  // 锚点节点会在 argumentData 中自动创建
 
   return (
     <div style={{ width: '100%', height: '100%', overflow: 'hidden', position: 'relative' }}>

@@ -26,7 +26,9 @@ def allowed_file(filename):
 
 def get_transcribe_service():
     """获取转录服务实例"""
-    gemini_api_key = current_app.config.get('GEMINI_API_KEY')
+    # 优先使用 app.config；若无则回退到 Config（避免因热更新不同步导致的空值）
+    from app.config import Config
+    gemini_api_key = current_app.config.get('GEMINI_API_KEY') or Config.GEMINI_API_KEY
     if not gemini_api_key:
         raise ValueError("GEMINI_API_KEY not configured")
     

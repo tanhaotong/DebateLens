@@ -28,7 +28,7 @@ import {
 import { useParams, useNavigate } from "react-router-dom";
 
 import AnalysisList from "./AnalysisList";
-
+import AttackDefenceTree from "./AttackDefenseTree";
 import AttackDefenceTree2 from "./AttackDefenceTree2";
 import ArgumentMap from "./ArgumentMap";
 import GeminiChat from "./GeminiChat";
@@ -393,7 +393,7 @@ const DebatePlayer: React.FC = () => {
                   label: (
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                       <BarChartOutlined />
-                      树形图
+                      静态图
                     </div>
                   )
                 },
@@ -429,7 +429,7 @@ const DebatePlayer: React.FC = () => {
           }}
         >
           {tabKey === 'tree' ? (
-            <AttackDefenceTree2
+            <AttackDefenceTree
               analysis={treeAnalysis}
               currentTime={currentTime}
               onNodeSelect={handleNodeSelect}

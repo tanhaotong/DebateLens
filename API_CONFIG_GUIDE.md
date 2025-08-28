@@ -2,10 +2,7 @@
 
 ## 概述
 
-DebateLens现在支持多种AI服务的API Key配置，包括：
-- **Gemini API** (Google)
-- **OpenAI API** (OpenAI)
-- **Anthropic API** (Claude)
+DebateLens现在仅支持gemini的API Key配置，包括：
 
 所有API Key都通过前端界面配置，并保存在后端的`config.json`文件中。
 
@@ -17,9 +14,7 @@ DebateLens现在支持多种AI服务的API Key配置，包括：
 3. 点击"保存配置"按钮
 
 ### 2. 配置验证
-- **Gemini API Key**: 应以 "AIza" 开头
-- **OpenAI API Key**: 应以 "sk-" 开头  
-- **Anthropic API Key**: 应以 "sk-ant-" 开头
+- **Gemini API Key**: 应以 "AIza" 开头"sk-ant-" 开头
 
 ## 后端使用
 
@@ -127,11 +122,3 @@ const callAI = async () => {
 - 检查网络连接
 - 检查API服务是否可用
 
-## 优先级
-
-当配置了多个API Key时，系统会按以下优先级尝试：
-1. Gemini API
-2. OpenAI API  
-3. Anthropic API
-
-如果首选API失败，系统会自动尝试下一个可用的API。 

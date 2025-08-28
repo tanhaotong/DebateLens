@@ -184,7 +184,7 @@ class AnalysisResult(db.Model):
    ↓
 2. 音频提取 (FFmpeg)
    ↓
-3. 语音转录 (Whisper API)
+3. 语音转录 (Gemini API)
    ↓
 4. AI分析 (Gemini API)
    ↓

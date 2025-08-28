@@ -12,8 +12,9 @@ chat_bp = Blueprint('chat', __name__, url_prefix='/api/chat')
 
 def get_chat_service():
     """获取聊天服务实例"""
+    # 避免使用 app.config 的过期值，优先 None 让服务内部回退到 Config 类属性
     api_key = current_app.config.get('GEMINI_API_KEY')
-    return GeminiChatService(api_key=api_key)
+    return GeminiChatService(api_key=api_key or None)
 
 @chat_bp.route('/chat', methods=['POST'])
 def chat():

@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from app.config import Config
+from flask import current_app
 import os
 import json
 
@@ -101,6 +102,14 @@ def update_config():
             Config.GEMINI_API_KEY = Config.api_config.get('geminiApiKey') or os.environ.get('GEMINI_API_KEY') or ''
             Config.OPENAI_API_KEY = Config.api_config.get('openaiApiKey') or os.environ.get('OPENAI_API_KEY') or ''
             Config.ANTHROPIC_API_KEY = Config.api_config.get('anthropicApiKey') or os.environ.get('ANTHROPIC_API_KEY') or ''
+            
+            # 同步到 Flask 应用的运行时配置，避免读取到旧值
+            try:
+                current_app.config['GEMINI_API_KEY'] = Config.GEMINI_API_KEY
+                current_app.config['OPENAI_API_KEY'] = Config.OPENAI_API_KEY
+                current_app.config['ANTHROPIC_API_KEY'] = Config.ANTHROPIC_API_KEY
+            except Exception as e:
+                print(f"同步 app.config 失败: {e}")
             
             return jsonify({
                 'success': True,

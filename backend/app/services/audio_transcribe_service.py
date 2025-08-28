@@ -31,6 +31,9 @@ class AudioTranscribeService:
             max_retries: 最大重试次数
             segment_length_ms: 音频分段长度（毫秒）
         """
+        # 增强：校验并初始化客户端
+        if not gemini_api_key:
+            raise ValueError("Gemini API Key 未配置")
         self.client = genai.Client(api_key=gemini_api_key)
         self.max_retries = max_retries
         self.segment_length_ms = segment_length_ms
@@ -83,7 +86,7 @@ class AudioTranscribeService:
     def gemini_transcribe(self, segment_path: str) -> str:
         """Gemini只做纯文本转写，使用流式生成"""
         prompt = """请将以下音频内容转写为完整、流畅的中文文字，不要加任何格式说明。
-请转录内容，为每句话标明准确时间戳[HH:MM:SS]（注意无需毫秒，所以理论上HH始终为0）和说话人角色(主持人、正方一辩、反方二辩等)。例如：[00:00:00]正方一辩：大家好！
+请转录内容，为每句话标明准确时间戳[MM:SS]和说话人角色(主持人、正方一辩、反方二辩等)。例如：[00:00]正方一辩：大家好！
 为保证时间戳准确，请注意：不要将一长段几分钟的内容放在同一个时间戳下，而是要根据内容分段，每段都标明时间戳。时间戳是相对于音频开始时间，而不是这一阶段开始时间。
 注意识别辩论阶段(开场白、立论、质询、自由辩论等)，并在每个阶段开始前用三级标题和加粗注明，如：### **辩论阶段：正方立论/正方小结/自由辩论**  如果音频一开头没有主持人串场，说明这是被截断的音频，无需标明开头的阶段。"""
         
@@ -429,6 +432,9 @@ class AudioTranscribeService:
                         break
                     try_count += 1
                     logger.warning(f"第{i+1}段转录内容为空，重试第{try_count}次。文件: {segment_path}")
+                if not text.strip():
+                    # 多次尝试后仍为空，主动失败，避免静默完成
+                    raise RuntimeError(f"第{i+1}段多次为空，终止任务。文件: {segment_path}")
                 logger.info(f"第{i+1}段转录文本长度: {len(text)}，内容预览: {text[:50]}")
                 all_text.append((start_ms, text))
                 raw_texts.append(text)

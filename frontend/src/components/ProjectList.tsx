@@ -516,6 +516,12 @@ const ProjectList: React.FC = () => {
                           onMouseLeave={(e) => {
                             e.currentTarget.style.transform = 'scale(1)';
                           }}
+                          onError={(e) => {
+                            // 图片加载失败时，显示错误状态
+                            console.error(`Failed to load cover image for project ${project.id}:`, e);
+                            e.currentTarget.style.display = 'none';
+                            // 可以在这里添加重试逻辑或者显示错误提示
+                          }}
                         />
                       ) : (
                         <div style={{

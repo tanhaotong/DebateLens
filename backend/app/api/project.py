@@ -87,7 +87,8 @@ def upload_bilibili_video():
                     if not current_video:
                         app.logger.error(f"视频记录不存在: {video_id}")
                         return
-                    
+
+                    before_download = time.time()
                     # 调用Bilibili下载和处理流程
                     from app.services.bilibili_service import BilibiliService
                     bili_service = BilibiliService()
@@ -108,10 +109,16 @@ def upload_bilibili_video():
                     
                     # 下载视频
                     video_path = bili_service.download_video(current_video.bv_id, video_id)
-                    
+
+                    after_download = time.time()
+                    print(f"视频下载耗时: {after_download - before_download:.2f}秒")
+
                     # 处理下载的视频
                     process_local_video_pipeline(video_id, video_path, task_dir)
-                    
+
+                    after_process = time.time()
+                    print(f'全过程耗时: {after_process - before_download:.2f}秒')
+
                 except Exception as e:
                     try:
                         current_video = Video.query.get(video_id)
@@ -212,7 +219,9 @@ def process_local_video_pipeline(video_id: str, video_path: str, task_dir: str):
         transcript_path = os.path.join(task_dir, "transcript.txt")
         tree_analysis_path = os.path.join(task_dir, "tree.json")
         bubble_analysis_path = os.path.join(task_dir, "bubble.json")
-        
+
+        before_extract = time.time()
+
         # 步骤1: 提取音频
         current_app.logger.info(f"步骤1: 提取音频")
         try:
@@ -225,7 +234,11 @@ def process_local_video_pipeline(video_id: str, video_path: str, task_dir: str):
         except Exception as e:
             current_app.logger.error(f"音频提取失败: {str(e)}")
             raise Exception(f"音频提取失败: {str(e)}")
-        
+
+        after_extract = time.time()
+        print(f"音频提取耗时: {after_extract - before_extract:.2f}秒")
+
+        before_transcribe = time.time()
         # 步骤2: 转录音频
         current_app.logger.info(f"步骤2: 转录音频")
         try:
@@ -243,7 +256,11 @@ def process_local_video_pipeline(video_id: str, video_path: str, task_dir: str):
         except Exception as e:
             current_app.logger.error(f"音频转录失败: {str(e)}")
             raise Exception(f"音频转录失败: {str(e)}")
-        
+
+        after_transcribe = time.time()
+        print(f"音频转录耗时: {after_transcribe - before_transcribe:.2f}秒")
+
+        before_analysis = time.time()
         # 步骤3: 分析转录文本
         current_app.logger.info(f"步骤3: 分析转录文本")
         try:
@@ -264,7 +281,10 @@ def process_local_video_pipeline(video_id: str, video_path: str, task_dir: str):
         except Exception as e:
             current_app.logger.error(f"文本分析失败: {str(e)}")
             raise Exception(f"文本分析失败: {str(e)}")
-        
+
+        after_analysis = time.time()
+        print(f"音频分析耗时: {after_analysis - before_analysis:.2f}秒")
+
         # 步骤4: 更新视频状态
         try:
             video = Video.query.get(video_id)
@@ -274,7 +294,8 @@ def process_local_video_pipeline(video_id: str, video_path: str, task_dir: str):
                 current_app.logger.info(f"本地视频处理完成: {video_id}")
         except Exception as db_error:
             current_app.logger.error(f"更新数据库状态失败: {str(db_error)}")
-        
+
+
     except Exception as e:
         current_app.logger.error(f"处理本地视频失败: {str(e)}")
         # 更新状态为失败
@@ -396,7 +417,10 @@ def retry_video_processing(video_id):
                             app.logger.info(f"B站视频文件不存在，开始下载: {current_video.bv_id}")
                             video_path = bili_service.download_video(current_video.bv_id, video_id)
                         
+                        before_process=time.time()
                         process_local_video_pipeline(video_id, video_path, task_dir)
+                        after_process = time.time()
+                        print(f'处理用时：{after_process-before_process:.2f}秒')
                     
                     app.logger.info(f"重试处理完成: {video_id}")
                     

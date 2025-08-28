@@ -49,6 +49,7 @@ const GeminiChat: React.FC<GeminiChatProps> = ({
   onClose,
   projectId
 }) => {
+  
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [loading, setLoading] = useState(false);
@@ -81,17 +82,10 @@ const GeminiChat: React.FC<GeminiChatProps> = ({
     setInputValue('');
     setLoading(true);
 
-    // 创建助手消息占位符
-    const assistantMessageId = (Date.now() + 1).toString();
-    const assistantMessage: Message = {
-      id: assistantMessageId,
-      role: 'assistant',
-      content: '',
-      timestamp: new Date()
-    };
-    setMessages(prev => [...prev, assistantMessage]);
+    // 移除占位的空助手消息，避免“空气泡”
 
     try {
+      
       // 调用非流式后端接口
       const response = await fetch('/api/chat/chat_full', {
         method: 'POST',
@@ -110,18 +104,22 @@ const GeminiChat: React.FC<GeminiChatProps> = ({
       }
       const data = await response.json();
       const answer = data.answer || data.content || data.text || '';
-      setMessages(prev => prev.map(msg =>
-        msg.id === assistantMessageId
-          ? { ...msg, content: answer }
-          : msg
-      ));
+      const assistantMessage: Message = {
+        id: (Date.now() + 3).toString(),
+        role: 'assistant',
+        content: answer,
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, assistantMessage]);
     } catch (error) {
       console.error('Gemini API 错误:', error);
-      setMessages(prev => prev.map(msg => 
-        msg.id === assistantMessageId 
-          ? { ...msg, content: '抱歉，我遇到了一个错误。请稍后重试。' }
-          : msg
-      ));
+      const errorAssistant: Message = {
+        id: (Date.now() + 4).toString(),
+        role: 'assistant',
+        content: '抱歉，我遇到了一个错误。请稍后重试。',
+        timestamp: new Date()
+      };
+      setMessages(prev => [...prev, errorAssistant]);
     } finally {
       setLoading(false);
     }
@@ -474,6 +472,7 @@ const GeminiChat: React.FC<GeminiChatProps> = ({
                   flexShrink: 0
                 }}
               />
+              {/* 修复：统一圆角，去除“尾巴”导致的小气泡 */}
               <div style={{
                 background: 'white',
                 borderRadius: '18px 18px 18px 4px',
